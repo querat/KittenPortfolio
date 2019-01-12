@@ -29,8 +29,40 @@ const actionGetKittens = () => (dispatch) => {
 
 };
 
+const actionDeleteKittenStarted = () => ({
+    type: Actions.HTTP_DELETE_KITTENS_STARTED,
+    payload: {},
+    error: false,
+    meta: {},
+});
+
+const actionDeleteKittenReturned = (response) => ({
+    type: Actions.HTTP_DELETE_KITTENS_RETURNED,
+    payload: response,
+    error: (200 <= response.statusCode && response.statusCode < 300),
+    meta: {},
+});
+
+const actionDeleteKitten = (kittenId) => (dispatch) => {
+    dispatch(actionGetKittensStarted());
+
+    return Api.kittens.delete(kittenId)
+        .then(response => {
+            console.log(`deleted kitten ${kittenId}`, response);
+            dispatch(actionDeleteKittenReturned(response));
+            dispatch(actionGetKittens());
+        })
+        .catch(response => {
+            console.log("error deleting kitten: ", response);
+            dispatch(actionDeleteKittenReturned())
+        });
+};
+
 export {
     actionGetKittens,
     actionGetKittensStarted,
     actionGetKittensReturned,
+    actionDeleteKitten,
+    actionDeleteKittenStarted,
+    actionDeleteKittenReturned
 }

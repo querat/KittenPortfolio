@@ -1,8 +1,8 @@
 import axios from "axios"
 
 const MOCKUP = true;
-
-const mockupKittens = [{
+const MOCKUP_LAG = 1000; // milliseconds
+let mockupKittens = [{
     id: 1,
     name: "Fluffy",
     breed: "Maine Coon"
@@ -10,10 +10,10 @@ const mockupKittens = [{
     id: 2,
     name: "Drunky",
     breed: "Scottish Fold"
-},{
-    id:3,
-    name:"Kitty",
-    breed:"Tabby"
+}, {
+    id: 3,
+    name: "Kitty",
+    breed: "Tabby"
 }];
 
 class _Api {
@@ -38,7 +38,7 @@ class _Api {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         resolve(mockupKittens);
-                    }, 1000);
+                    }, MOCKUP_LAG);
                 })
             }
 
@@ -49,6 +49,19 @@ class _Api {
                 this.config
             )
 
+        }, // !get()
+
+        delete: (kittenId) => {
+            if (MOCKUP === true) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        mockupKittens = mockupKittens.filter(kitten => kitten.id !== kittenId);
+                        resolve({statusCode:200})
+                    }, MOCKUP_LAG)
+                });
+            }
+
+            // return axios.delete(todo)
         }
 
     } // !kittens

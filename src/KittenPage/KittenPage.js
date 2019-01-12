@@ -1,7 +1,9 @@
 import React, {Component} from "react"
 import {connect} from "react-redux"
-import {actionGetKittens} from "../redux/kittenPage/actions";
+
+import {HeaderFooter} from "../HeaderFooter";
 import KittenTable from "./KittenTable";
+import {actionGetKittens} from "../redux/kittenPage/actions";
 
 class KittenPage extends Component {
 
@@ -12,9 +14,9 @@ class KittenPage extends Component {
 
     render() {
         return (
-            <div>
+            <HeaderFooter>
                 <KittenTable/>
-            </div>
+            </HeaderFooter>
         );
     }
 
