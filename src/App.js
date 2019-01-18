@@ -1,6 +1,3 @@
-// App stylesheets
-import "bootstrap/dist/css/bootstrap.min.css"
-
 // JS libraries imports
 import React, {Component} from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom"
@@ -16,8 +13,9 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path={"/"}/>
+                        <Route exact path={"/"} component={KittenPage}/>
                         <Route exact path={'/kittens'} component={KittenPage}/>
+                        <Route exact path={'/otherpage'} component={KittenPage}/>
                     </Switch>
                 </BrowserRouter>
             </Provider>

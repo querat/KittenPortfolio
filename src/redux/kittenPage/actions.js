@@ -50,11 +50,13 @@ const actionDeleteKitten = (kittenId) => (dispatch) => {
         .then(response => {
             console.log(`deleted kitten ${kittenId}`, response);
             dispatch(actionDeleteKittenReturned(response));
-            dispatch(actionGetKittens());
+            dispatch(actionGetKittens()); // Refetch kittens after this one is deleted
+            // todo dispatch(actionShowAlert(`kitten deleted`, "success"));
         })
         .catch(response => {
             console.log("error deleting kitten: ", response);
             dispatch(actionDeleteKittenReturned())
+            // todo dispatch(actionShowAlert("Error deleting kitten", "warning"));
         });
 };
 

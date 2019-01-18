@@ -60,9 +60,8 @@ class _Api {
                     }, MOCKUP_LAG)
                 });
             }
-
             // return axios.delete(todo)
-        }
+        } // !delete()
 
     } // !kittens
 }

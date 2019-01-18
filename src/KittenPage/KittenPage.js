@@ -14,7 +14,7 @@ class KittenPage extends Component {
 
     render() {
         return (
-            <HeaderFooter>
+            <HeaderFooter title={"Kittens"}>
                 <KittenTable/>
             </HeaderFooter>
         );

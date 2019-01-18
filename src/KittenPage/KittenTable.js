@@ -4,8 +4,6 @@ import {connect} from "react-redux"
 import * as RS from "reactstrap"
 import * as F from "react-feather"
 
-import 'react-table/react-table.css'
-
 import {actionGetKittens, actionDeleteKitten} from "../redux/kittenPage/actions"
 
 class KittenTable extends React.Component {
@@ -53,28 +51,29 @@ class KittenTable extends React.Component {
 
     render() {
         return (
-            <RS.Card style={{margin: "10%", padding: 10}}>
-                <RS.ButtonGroup className={"float-right"} style={{bottom:5}}>
-                    <div style={{width:"90%"}}></div>
-                    <RS.Button size={"sm"} color={"primary"}
-                               disabled={this.props.loading}
-                               onClick={this.props.onRefreshRequested}>
-                        <F.RefreshCw color={"white"}/>
-                    </RS.Button>
-                    <RS.Button size={"sm"} color={"primary"}
-                               disabled={this.props.loading}
-                               onClick={() => {
-                               }}>
-                        <F.Plus color={"white"}/>
-                    </RS.Button>
-                </RS.ButtonGroup>
+            <div>
+                <div className={"sticky-top bg-white"}>
+                    <RS.ButtonGroup className={"float-right mb-1"}>
+                        <RS.Button size={"sm"} color={"primary"}
+                                   disabled={this.props.loading}
+                                   onClick={this.props.onRefreshRequested}>
+                            <F.RefreshCw color={"white"}/>
+                        </RS.Button>
+                        <RS.Button size={"sm"} color={"primary"}
+                                   disabled={this.props.loading}
+                                   onClick={this.props.onAddClicked}>
+                            <F.Plus color={"white"}/>
+                        </RS.Button>
+                    </RS.ButtonGroup>
+                    <div className={"clearfix"}/>
+                </div>
                 <ReactTable
                     columns={this.columns}
                     data={this.props.kittens}
                     loading={this.props.loading}
                     defaultPageSize={5}
                 />
-            </RS.Card>
+            </div>
         )
 
     }
@@ -87,16 +86,18 @@ export default connect(
     }),
     (dispatch) => ({
         onAddClicked: () => {
+            console.log("Add clicked")
             // dispatch(actionOpenAddMenu(todo))
         },
         onRefreshRequested: () => {
+            console.log("Refresh requested");
             dispatch(actionGetKittens());
         },
         onEditClicked: (row) => {
             console.log("Edit clicked.", row);
         },
         onRemoveClicked: (row) => {
-            console.log("Remove clicked.", row)
+            console.log("Remove clicked.", row);
             const kittenId = row.id;
             dispatch(actionDeleteKitten(kittenId));
         },
