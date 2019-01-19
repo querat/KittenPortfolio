@@ -1,14 +1,15 @@
-# KittenStack
+# KittenPortfolio
 
 This project is to become be a small portfolio about administrating kittens with a dashboard
 
-Dependencies:
- - ReactJs
- - Redux (State management)
- - react-router (URL manipulation)
- - react-feather (icons)
- - axios (AJAX queries)
- - reactstrap (Layout)
+### Dependencies:
+- Frontend:
+  - ReactJs
+  - Redux (State management)
+  - react-router (URL manipulation)
+  - react-feather (icons)
+  - axios (AJAX queries)
+  - reactstrap (Layout)
 
 ## Installation
 
