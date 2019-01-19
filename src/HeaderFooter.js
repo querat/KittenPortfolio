@@ -1,6 +1,7 @@
 import * as React from "react"
 import * as RS from "reactstrap"
 import * as F from "react-feather"
+import {Link} from 'react-router-dom'
 
 class HeaderFooter extends React.Component {
 
@@ -24,7 +25,7 @@ class HeaderFooter extends React.Component {
     buildNavBar() {
         let tabs = this.navItems.map((navItem, index) =>
             <RS.NavItem key={index}>
-                <RS.NavLink href={navItem.href} active={navItem.active}>
+                <RS.NavLink tag={Link} to={navItem.href} active={navItem.active}>
                     {navItem.icon}{navItem.name}
                 </RS.NavLink>
             </RS.NavItem>
