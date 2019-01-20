@@ -21,7 +21,7 @@ const actionGetKittens = () => (dispatch) => {
     return Api.kittens.get()
         .then((response) => {
             console.log("success", response)
-            dispatch(actionGetKittensReturned(response))
+            dispatch(actionGetKittensReturned(response.data.results))
         })
         .catch((response) => {
             console.log("error", response)

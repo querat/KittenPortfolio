@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const MOCKUP = true;
+const MOCKUP = false;
 const MOCKUP_LAG = 1000; // milliseconds
 let mockupKittens = [{
     id: 1,
@@ -18,22 +18,19 @@ let mockupKittens = [{
 
 class _Api {
 
-    apiUrl = "https://api.thecatapi.com/v1";
-    apiUserId = "pxtkqi";
-    apiKey = "248b0c67-186d-4e93-ba35-38ba34743dc3";
-    apiHeaderName = "x-api-key";
+    apiUrl = "http://localhost:8000";
 
     config() {
         return {
-            headers: {
-                "x-api-key": this.apiKey
-            }
+            headers: {}
         }
     };
 
     kittens = {
 
         get: () => {
+
+
             if (MOCKUP === true) {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
@@ -42,13 +39,8 @@ class _Api {
                 })
             }
 
-            const endPoint = `${this.apiUrl}/images/search`;
-
-            return axios.get(
-                endPoint,
-                this.config
-            )
-
+            const endPoint = `${this.apiUrl}/kittens/`;
+            return axios.get(endPoint);
         }, // !get()
 
         delete: (kittenId) => {
@@ -56,11 +48,13 @@ class _Api {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         mockupKittens = mockupKittens.filter(kitten => kitten.id !== kittenId);
-                        resolve({statusCode:200})
+                        resolve({statusCode: 200})
                     }, MOCKUP_LAG)
                 });
             }
-            // return axios.delete(todo)
+            return axios.delete(
+                `${this.apiUrl}/kittens/${kittenId}`
+            )
         } // !delete()
 
     } // !kittens
