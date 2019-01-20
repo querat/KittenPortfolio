@@ -20,6 +20,22 @@ class _Api {
 
     apiUrl = "http://localhost:8000";
 
+    parseDjangoRestError(err) {
+        let errorKey = "";
+        let errorMsg = "";
+
+        try {
+            const response = err.response.data;
+            errorKey = Object.keys(response)[0];
+            const msg = response[errorKey][0];
+            errorMsg = `${errorKey}: ${msg}`
+
+        } catch {
+            return errorMsg;
+        }
+        return errorMsg
+    }
+
     config() {
         return {
             headers: {}
@@ -27,6 +43,13 @@ class _Api {
     };
 
     kittens = {
+
+        create: (kittenData) => {
+            return axios.post(
+                `${this.apiUrl}/kittens/`,
+                kittenData
+            );
+        },
 
         get: () => {
 

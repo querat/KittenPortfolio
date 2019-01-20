@@ -60,11 +60,64 @@ const actionDeleteKitten = (kittenId) => (dispatch) => {
         });
 };
 
+const actionHttpQueryStarted = () => ({
+    type: Actions.HTTP_QUERY_STARTED,
+    payload: {},
+    error: false,
+    meta: {}
+});
+
+const actionHttpAddKittenReturned = (response) => ({
+    type: Actions.HTTP_ADD_KITTEN_RETURNED,
+    payload: response,
+    error: 200 <= response.statusCode && response.statusCode < 300,
+    meta: {}
+});
+
+const actionHttpAddKitten = (kittenData) => (dispatch) => {
+    dispatch(actionHttpQueryStarted());
+
+    return Api.kittens.create(kittenData)
+        .then(response => {
+            console.log("kitten added");
+            dispatch(actionHttpAddKittenReturned(response));
+            dispatch(actionCloseCrudModal());
+            dispatch(actionGetKittens());
+        })
+        .catch(jsError => {
+            console.log("error adding kitten", Api.parseDjangoRestError(jsError));
+            // todo show temp alert
+            dispatch(actionHttpAddKittenReturned(jsError));
+        })
+};
+
+const actionOpenCrudModal = (mode, kittenData) => ({
+    type: Actions.OPEN_CRUD_MODAL,
+    payload: kittenData,
+    error: false,
+    meta: {
+        mode: mode
+    }
+});
+
+const actionCloseCrudModal = () => ({
+    type: Actions.CLOSE_CRUD_MODAL,
+    payload: {},
+    error: false,
+    meta: {}
+});
+
+
 export {
+    actionOpenCrudModal,
+    actionCloseCrudModal,
     actionGetKittens,
     actionGetKittensStarted,
     actionGetKittensReturned,
     actionDeleteKitten,
     actionDeleteKittenStarted,
-    actionDeleteKittenReturned
+    actionDeleteKittenReturned,
+    actionHttpAddKitten,
+    actionHttpAddKittenReturned,
+    actionHttpQueryStarted,
 }

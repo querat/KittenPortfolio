@@ -4,7 +4,11 @@ import {connect} from "react-redux"
 import * as RS from "reactstrap"
 import * as F from "react-feather"
 
-import {actionGetKittens, actionDeleteKitten} from "../redux/kittenPage/actions"
+import {
+    actionGetKittens,
+    actionDeleteKitten,
+    actionOpenCrudModal
+} from "../redux/kittenPage/actions"
 
 class KittenTable extends React.Component {
 
@@ -86,8 +90,8 @@ export default connect(
     }),
     (dispatch) => ({
         onAddClicked: () => {
-            console.log("Add clicked")
-            // dispatch(actionOpenAddMenu(todo))
+            console.log("Add clicked");
+            dispatch(actionOpenCrudModal("ADDING", {}))
         },
         onRefreshRequested: () => {
             console.log("Refresh requested");
