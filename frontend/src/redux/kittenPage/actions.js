@@ -1,5 +1,6 @@
 import * as Actions from "../actionsTypes"
 import {Api} from "../../Api/Api"
+import {actionShowTemporaryAlert} from "../alert/actions";
 
 const actionGetKittensStarted = () => ({
     type: Actions.HTTP_GET_KITTENS_STARTED,
@@ -8,23 +9,29 @@ const actionGetKittensStarted = () => ({
     meta: {},
 });
 
-const actionGetKittensReturned = (response) => ({
+const actionGetKittensReturned = (response, isError = false) => ({
     type: Actions.HTTP_GET_KITTENS_RETURNED,
     payload: response,
-    error: (200 <= response.statusCode && response.statusCode < 300),
+    error: isError,
     meta: {},
 });
+
 
 const actionGetKittens = () => (dispatch) => {
     dispatch(actionGetKittensStarted());
 
     return Api.kittens.get()
         .then((response) => {
-            console.log("success", response)
+            console.log("success", response);
+            console.log("success", response);
             dispatch(actionGetKittensReturned(response.data.results))
         })
-        .catch((response) => {
-            console.log("error", response)
+        .catch((jsError) => {
+            dispatch(actionGetKittensReturned([], true));
+            dispatch(actionShowTemporaryAlert(
+                Api.buildErrorMsg(jsError),
+                "danger"));
+            console.log("error", jsError)
         });
 
 };
@@ -36,10 +43,10 @@ const actionDeleteKittenStarted = () => ({
     meta: {},
 });
 
-const actionDeleteKittenReturned = (response) => ({
+const actionDeleteKittenReturned = (isError = false) => ({
     type: Actions.HTTP_DELETE_KITTENS_RETURNED,
-    payload: response,
-    error: (200 <= response.statusCode && response.statusCode < 300),
+    payload: {},
+    error: isError,
     meta: {},
 });
 
@@ -51,12 +58,17 @@ const actionDeleteKitten = (kittenId) => (dispatch) => {
             console.log(`deleted kitten ${kittenId}`, response);
             dispatch(actionDeleteKittenReturned(response));
             dispatch(actionGetKittens()); // Refetch kittens after this one is deleted
-            // todo dispatch(actionShowAlert(`kitten deleted`, "success"));
+            dispatch(actionShowTemporaryAlert(
+                `deleted kitten !`
+            ));
         })
-        .catch(response => {
-            console.log("error deleting kitten: ", response);
-            dispatch(actionDeleteKittenReturned())
-            // todo dispatch(actionShowAlert("Error deleting kitten", "warning"));
+        .catch(jsError => {
+            console.log("error deleting kitten: ", jsError);
+            dispatch(actionDeleteKittenReturned(true));
+            dispatch(actionShowTemporaryAlert(
+                Api.buildErrorMsg(jsError),
+                "danger"
+            ))
         });
 };
 
@@ -83,10 +95,16 @@ const actionHttpAddKitten = (kittenData) => (dispatch) => {
             dispatch(actionHttpAddKittenReturned(response));
             dispatch(actionCloseCrudModal());
             dispatch(actionGetKittens());
+            dispatch(actionShowTemporaryAlert(
+                `added kitten ${kittenData.name} !`
+            ));
         })
         .catch(jsError => {
             console.log("error adding kitten", Api.parseDjangoRestError(jsError));
-            // todo show temp alert
+            dispatch(actionShowTemporaryAlert(
+                Api.buildErrorMsg(jsError),
+                "danger"
+            ));
             dispatch(actionHttpAddKittenReturned(jsError));
         })
 };

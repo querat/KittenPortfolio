@@ -56,8 +56,6 @@ const kittenReducer = (state, action) => {
             };
 
         default:
-            if (!action.type.startsWith("@@redux"))
-                console.warn("untreated action: ", action);
             return {...state}
 
     }

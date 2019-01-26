@@ -2,6 +2,8 @@ import * as React from "react"
 import * as RS from "reactstrap"
 import * as F from "react-feather"
 import {Link} from 'react-router-dom'
+import {Alert} from "reactstrap";
+import {connect} from "react-redux";
 
 class HeaderFooter extends React.Component {
 
@@ -60,10 +62,26 @@ class HeaderFooter extends React.Component {
                     </RS.Card>
                 </div>
 
+                <Alert
+                    className={"align-self-end mr-3 w-50"}
+                    isOpen={this.props.alertIsOpen}
+                    color={this.props.alertColor}
+                >
+                    {this.props.alertMessage}
+                </Alert>
             </div>
         );
     }
 
 }
+
+HeaderFooter = connect(
+    (state) => ({
+        alertIsOpen: state.alert.alertIsOpen,
+        alertMessage: state.alert.alertMessage,
+        alertColor: state.alert.alertColor,
+    }),
+    (dispatch) => ({})
+)(HeaderFooter);
 
 export {HeaderFooter}

@@ -36,6 +36,15 @@ class _Api {
         return errorMsg
     }
 
+    buildErrorMsg(jsError, prefix="Error: ") {
+
+        if (jsError.response) {
+            return `${prefix} ${this.parseDjangoRestError(jsError)}`;
+        }
+        return `${jsError.toString()}`; // no prefix. very likely to be "Error: Network Error"
+    }
+
+
     config() {
         return {
             headers: {}
@@ -52,8 +61,6 @@ class _Api {
         },
 
         get: () => {
-
-
             if (MOCKUP === true) {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
