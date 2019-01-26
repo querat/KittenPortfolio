@@ -55,4 +55,8 @@ You can then run the project this way:
 
 `./manage.py runserver`
 
+# TODO
+Users & JSON Web tokens based authentication
+more kittens data fields
+
 
