@@ -7,7 +7,7 @@ import * as F from "react-feather"
 import {
     actionGetKittens,
     actionDeleteKitten,
-    actionOpenCrudModal
+    actionOpenCrudModal,
 } from "../redux/kittenPage/actions"
 
 class KittenTable extends React.Component {
@@ -97,13 +97,13 @@ export default connect(
             console.log("Refresh requested");
             dispatch(actionGetKittens());
         },
-        onEditClicked: (row) => {
-            console.log("Edit clicked.", row);
+        onEditClicked: (kittenData) => {
+            console.log("Edit clicked.", kittenData);
+            dispatch(actionOpenCrudModal("EDITING", kittenData));
         },
-        onRemoveClicked: (row) => {
-            console.log("Remove clicked.", row);
-            const kittenId = row.id;
-            dispatch(actionDeleteKitten(kittenId));
+        onRemoveClicked: (kittenData) => {
+            console.log("Remove clicked.", kittenData);
+            dispatch(actionOpenCrudModal("DELETING", kittenData));
         },
 
     })

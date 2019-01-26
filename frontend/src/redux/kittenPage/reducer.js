@@ -27,7 +27,7 @@ const kittenReducer = (state, action) => {
         case Actions.HTTP_ADD_KITTEN_RETURNED:
             return {
                 ...state,
-                loading:false,
+                loading: false,
             };
 
         case Actions.HTTP_GET_KITTENS_STARTED:
@@ -46,7 +46,7 @@ const kittenReducer = (state, action) => {
         case Actions.HTTP_DELETE_KITTENS_STARTED:
             return {
                 ...state,
-                loading:true,
+                loading: true,
             };
 
         case Actions.HTTP_DELETE_KITTENS_RETURNED:
@@ -55,12 +55,16 @@ const kittenReducer = (state, action) => {
                 loading: false,
             };
 
+        case Actions.HTTP_EDIT_KITTEN_RETURNED:
+            return {
+                ...state,
+                loading:false,
+            };
+
         default:
             return {...state}
 
     }
-
-
 };
 
 export {kittenReducer}

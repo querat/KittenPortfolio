@@ -17,14 +17,15 @@ const actionGetKittensReturned = (response, isError = false) => ({
 });
 
 
-const actionGetKittens = () => (dispatch) => {
+const actionGetKittens = (sendAlertAfter = false) => (dispatch) => {
     dispatch(actionGetKittensStarted());
 
     return Api.kittens.get()
         .then((response) => {
-            console.log("success", response);
-            console.log("success", response);
-            dispatch(actionGetKittensReturned(response.data.results))
+            dispatch(actionGetKittensReturned(response.data.results));
+            if (sendAlertAfter) {
+                dispatch(actionShowTemporaryAlert("Kittens ready !", "info"));
+            }
         })
         .catch((jsError) => {
             dispatch(actionGetKittensReturned([], true));
@@ -50,20 +51,18 @@ const actionDeleteKittenReturned = (isError = false) => ({
     meta: {},
 });
 
-const actionDeleteKitten = (kittenId) => (dispatch) => {
+const actionDeleteKitten = (kittenData) => (dispatch) => {
     dispatch(actionGetKittensStarted());
-
-    return Api.kittens.delete(kittenId)
+    return Api.kittens.delete(kittenData.id)
         .then(response => {
-            console.log(`deleted kitten ${kittenId}`, response);
             dispatch(actionDeleteKittenReturned(response));
+            dispatch(actionCloseCrudModal());
             dispatch(actionGetKittens()); // Refetch kittens after this one is deleted
             dispatch(actionShowTemporaryAlert(
                 `deleted kitten !`
             ));
         })
         .catch(jsError => {
-            console.log("error deleting kitten: ", jsError);
             dispatch(actionDeleteKittenReturned(true));
             dispatch(actionShowTemporaryAlert(
                 Api.buildErrorMsg(jsError),
@@ -79,10 +78,10 @@ const actionHttpQueryStarted = () => ({
     meta: {}
 });
 
-const actionHttpAddKittenReturned = (response) => ({
+const actionHttpAddKittenReturned = (response, isError = false) => ({
     type: Actions.HTTP_ADD_KITTEN_RETURNED,
     payload: response,
-    error: 200 <= response.statusCode && response.statusCode < 300,
+    error: isError,
     meta: {}
 });
 
@@ -91,7 +90,6 @@ const actionHttpAddKitten = (kittenData) => (dispatch) => {
 
     return Api.kittens.create(kittenData)
         .then(response => {
-            console.log("kitten added");
             dispatch(actionHttpAddKittenReturned(response));
             dispatch(actionCloseCrudModal());
             dispatch(actionGetKittens());
@@ -100,14 +98,38 @@ const actionHttpAddKitten = (kittenData) => (dispatch) => {
             ));
         })
         .catch(jsError => {
-            console.log("error adding kitten", Api.parseDjangoRestError(jsError));
             dispatch(actionShowTemporaryAlert(
                 Api.buildErrorMsg(jsError),
                 "danger"
             ));
-            dispatch(actionHttpAddKittenReturned(jsError));
+            dispatch(actionHttpAddKittenReturned(jsError, true));
         })
 };
+
+
+const actionHttpEditKittenReturned = (response, isError = false) => ({
+    type: Actions.HTTP_EDIT_KITTEN_RETURNED,
+    payload: response,
+    error: isError,
+    meta: {}
+});
+
+
+const actionHttpEditKitten = (kittenData) => dispatch => {
+    dispatch(actionHttpQueryStarted());
+
+    return Api.kittens.update(kittenData)
+        .then(response => {
+            dispatch(actionCloseCrudModal());
+            dispatch(actionShowTemporaryAlert(`kitten edited !`));
+            dispatch(actionGetKittens());
+        })
+        .catch(jsError => {
+            dispatch(actionShowTemporaryAlert(Api.buildErrorMsg(jsError), "danger"));
+            dispatch(actionHttpEditKittenReturned(jsError, true));
+        });
+};
+
 
 const actionOpenCrudModal = (mode, kittenData) => ({
     type: Actions.OPEN_CRUD_MODAL,
@@ -138,4 +160,6 @@ export {
     actionHttpAddKitten,
     actionHttpAddKittenReturned,
     actionHttpQueryStarted,
+    actionHttpEditKitten,
+    actionHttpEditKittenReturned,
 }

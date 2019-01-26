@@ -73,18 +73,17 @@ class _Api {
             return axios.get(endPoint);
         }, // !get()
 
+        update: kittenData => {
+            const endpoint = `${this.apiUrl}/kittens/${kittenData.id}/`;
+            return axios.patch(
+                endpoint,
+                {...kittenData, id:undefined} // remove the id from data
+            );
+        },
+
         delete: (kittenId) => {
-            if (MOCKUP === true) {
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        mockupKittens = mockupKittens.filter(kitten => kitten.id !== kittenId);
-                        resolve({statusCode: 200})
-                    }, MOCKUP_LAG)
-                });
-            }
-            return axios.delete(
-                `${this.apiUrl}/kittens/${kittenId}`
-            )
+            const endpoint = `${this.apiUrl}/kittens/${kittenId}`;
+            return axios.delete(endpoint)
         } // !delete()
 
     } // !kittens
