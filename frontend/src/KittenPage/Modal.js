@@ -105,10 +105,10 @@ class _FormAddEdit extends React.Component {
                 <FormGroup onChange={this.onFormChange}>
 
                     <Label for={"kittenName"}>Name</Label>
-                    <Input id={"kittenName"} name={"name"} placeholder={"name"}/>
+                    <Input id={"kittenName"} name={"name"} placeholder={"name"} value={this.state.kittenData.name} onChange={this.onFormChange}/>
 
                     <Label for={"kittenBreed"}>Breed</Label>
-                    <Input id={"kittenBreed"} name={"breed"} placeholder={"breed"}/>
+                    <Input id={"kittenBreed"} name={"breed"} placeholder={"breed"} value={this.state.kittenData.breed} onChange={this.onFormChange}/>
                 </FormGroup>
             </React.Fragment>
         );
@@ -161,7 +161,7 @@ class Modal extends React.Component {
             case "DELETING":
                 return `Deleting kitten ${kittenData.name}`
             default:
-                console.warn("invalid operation !");
+                console.warn(`invalid operation ! ${this.props.crudMode}`);
                 return "";
         }
     }
